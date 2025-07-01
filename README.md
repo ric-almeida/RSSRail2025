@@ -14,9 +14,9 @@ For the analysis, please install PRISM: https://www.prismmodelchecker.org/
 ## Generating transition systems for visualization purposes
 
 The full transition systems can be generated for visualization purposes from each of the BRS files using `BigraphER`:
-- For `Rail_BRS.big`, the system is generated running `bigrapher full --solver=GBS -f svg -t Rail_BRS -s Rail_BRS.big`
-- For `Rail_PBRS.big`, the Discrete-Time Markov Chain (DTMC) is generated running `bigrapher full --solver=GBS -f svg -t Rail_PBRS -s Rail_PBRS.big -M 3000`
-- For `Rail_ABRS.big`, the Markov Decision Process (MDP) is generated with `bigrapher full --solver=GBS -f svg -t Rail_ABRS -s Rail_ABRS.big`
+- For `Rail_BRS.big`, the system is generated running `bigrapher full --solver=GBS -f svg -t Rail_BRS Rail_BRS.big -s`
+- For `Rail_PBRS.big`, the Discrete-Time Markov Chain (DTMC) is generated running `bigrapher full --solver=GBS -f svg -t Rail_PBRS Rail_PBRS.big -M 3000 -s`
+- For `Rail_ABRS.big`, the Markov Decision Process (MDP) is generated with `bigrapher full --solver=GBS -f svg -t Rail_ABRS Rail_ABRS.big -s`
  
 In all cases, the options do as follows:
 - `full` indicates we want the full transition system (and not just a trace, as with `sim`) 
