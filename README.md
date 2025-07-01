@@ -35,5 +35,7 @@ To prepare the inputs for the model analysis, we generate the transition systems
 - For `Rail_ABRS.big`: `bigrapher full --solver=GBS -p Rail_ABRS.tra -l Rail_ABRS.csl Rail_ABRS.big` 
 where:
 - the `.tra` files will be the PRISM input files
-- `-l` indicates the name of the output file where the CSL query results are stored
+- `-l` indicates the name of the output file where the states satisfying the predicates are stored.
+
+
 
