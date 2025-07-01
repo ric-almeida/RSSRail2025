@@ -1,0 +1,6 @@
+*.svg
+*.log
+*.pdf
+*.tikz
+*.aux
+*.DS_Store
