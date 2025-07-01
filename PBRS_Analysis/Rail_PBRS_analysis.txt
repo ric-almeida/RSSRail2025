@@ -1,0 +1,103 @@
+P=? [ F "oob" ]:
+Result
+0
+
+P=? [ F "charge_fail1_80" ]:
+Result
+0.86656943735
+
+P=? [ F "charge_fail1_85" ]:
+Result
+0.873295803926
+
+P=? [ F "charge_fail1_90" ]:
+Result
+0.906533830931
+
+P=? [ F "charge_fail1_95" ]:
+Result
+0.910711112666
+
+P=? [ F "charge_fail1_100" ]:
+Result
+0.941672761859
+
+P=? [ F "charge_fail2_80" ]:
+Result
+0.667460620424
+
+P=? [ F "charge_fail2_85" ]:
+Result
+0.669834147532
+
+P=? [ F "charge_fail2_90" ]:
+Result
+0.676771898784
+
+P=? [ F "charge_fail2_95" ]:
+Result
+0.688458802945
+
+P=? [ F "charge_fail2_100" ]:
+Result
+0.717158801545
+
+P=? [ F "charge_fail3_80" ]:
+Result
+0.327087920186
+
+P=? [ F "charge_fail3_85" ]:
+Result
+0.324826379588
+
+P=? [ F "charge_fail3_90" ]:
+Result
+0.324161468172
+
+P=? [ F "charge_fail3_95" ]:
+Result
+0.329483499247
+
+P=? [ F "charge_fail3_100" ]:
+Result
+0.339468940232
+
+P=? [ F "charge_fail4_80" ]:
+Result
+0.0743064661929
+
+P=? [ F "charge_fail4_85" ]:
+Result
+0.0716845024839
+
+P=? [ F "charge_fail4_90" ]:
+Result
+0.069872040939
+
+P=? [ F "charge_fail4_95" ]:
+Result
+0.067552068672
+
+P=? [ F "charge_fail4_100" ]:
+Result
+0.0657647232473
+
+P=? [ F "charge_no_fail_80" ]:
+Result
+0.790124869211
+
+P=? [ F "charge_no_fail_85" ]:
+Result
+0.854667430565
+
+P=? [ F "charge_no_fail_90" ]:
+Result
+0.92448225
+
+P=? [ F "charge_no_fail_95" ]:
+Result
+0.9615
+
+P=? [ F "charge_no_fail_100" ]:
+Result
+1

@@ -39,16 +39,20 @@ where:
 
 ## PBRS Analysis
 
-For the analysis of the PBRS model with failures, we generate the transition matrix and the predicate information as above using:
-`bigrapher full --solver=GBS -p Rail_PBRS_with_failures.tra -l Rail_PBRS_with_failures.csl Rail_PBRS_with_failures.big -M 3000`
+The output files of this analysis can be found under `PBRS_Analysis`. Below we describe the process of generating them, in particular `Rail_PBRS_analysis.txt`, that populates `Table-1` in the paper.
 
-Next, we augment the `.csl` file with the PCTL queries (`/PBRS_Analysis/Queries.props`) that correspond to `Table-1` in the paper. The modifed `.csl` file can now serve as input to the PRISM model checker with the `.tra` file to model check and give the results:
+We start by augmenting the `.csl` file with the PCTL queries that correspond to the headers of `Table-1` (eg, do `cat PBRS_Analysis/Queries.props >> Rail_PBRS.csl`). The modifed file can now serve as input to the PRISM model checker with the `.tra` file to model check and produce the results:
 
-`prism -importtrans Rail_PBRS_with_failures.tra Rail_PBRS_with_failures.csl -dtmc`
+`prism -importtrans Rail_PBRS.tra Rail_PBRS.csl -dtmc -exportresults Rail_PBRS_analysis.txt`
 
-In order to change the failure rates, change `float failure_weight = 0.01` in `Rail_PBRS_with_failures.big` to a value of your choice and repeat the above steps.
+This saves the output results in `Rail_PBRS_analysis.txt`, and these can be read as explained below. 
+```
+P=? [ F "charge_fail[n]_[l]" ]:
+Result
+[p]
+```
+means that the probability of a train reaching [b]% battery level given [n] track failures is [p].
 
-We have already generated and stored the `.tra` and `.lab` files corresponding to the values discussed in the paper in the subdirectory `PBRS_Analysis`.
 
 ## ABRS Analysis
 

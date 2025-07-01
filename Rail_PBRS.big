@@ -45,6 +45,7 @@ int waiting_t = 10;         # Trains wait at stops for 10 minutes
 atomic fun ctrl Failure(x) = 0;
 ctrl Fail = 0;
 int max_failures = 5;     
+float failure_rate = 0.01;
 
 # Gain the Charge from traversing the current electrified track
 fun react gain_charge(c,t) = 
@@ -132,8 +133,8 @@ fun react train_ends(t) =
   @[2];
 
 fun react electrical_failure(num) =
-    E.Yes || Failure(num) -[0.01]-> E.No || Failure(num+1)
-if !(GC(time_end+time_incs)) in ctx;
+    E.Yes || Failure(num) -[failure_rate]-> E.No || Failure(num+1)
+  if !(GC(time_end+time_incs)) in ctx;
 
 # Start the Global Clock
 fun react start_clock(tick_incs) = Clock.(GC(0)) -[1.0]-> Clock.(GC(tick_incs));
