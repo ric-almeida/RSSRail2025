@@ -1,0 +1,238 @@
+# Segments and Segment Links
+ctrl Segment = 0;    # Tracks are represented by Segments and nest the following entities:
+ctrl WP = 1;                # A waypoint linking linking to the previous segment on the current route, nesting:
+atomic ctrl Next = 1;            # pointer to the next segment's WP
+atomic fun ctrl SName(s) = 0;
+ctrl Electr = 0;     # Is this track electrified?
+atomic ctrl Yes = 0; # Yes
+atomic ctrl No = 0;  # No
+atomic ctrl RStops = 1;  # If there's a Route that stops at this track (eg, a station), then RStops will link to the Stops of that Route
+
+ctrl Routes = 0;
+fun ctrl R(name) = 0;         # Routes are distinguished by their name (eg, A, B, C, etc), and nest the following entities:
+atomic ctrl Start = 1;        # Links to the SLinkS of this Route's starting track
+atomic ctrl Trains = 1;       # Links to the current active Train(s) on this Route, if any
+atomic ctrl Stops = 1;        # Links to all the tracks in this Route that are Stops (eg, stations)
+atomic fun ctrl Failure(x) = 0;
+ctrl Fail = 0;
+
+ctrl Train = 0;                      # A generic train, which has:
+atomic fun ctrl Charge(x) = 0;       # The current charge (in percentage)
+atomic ctrl OutOfBattery = 0;        # A flag that indicates it's run out of battery
+atomic ctrl Route = 1;               # Links to this Train's Route
+atomic ctrl RouteN = 1;              # Links to the next track in this Train's Route
+atomic ctrl Clock = 1;               # Links to this Train's Local Clock in the Clocks perspective/region
+ctrl Action = 0;                     # The current Action of the train, which can be:
+atomic ctrl Move = 0;                # Move if it's ready to move to the next track
+atomic ctrl Update = 0;              # Update the current Action
+ctrl Wait = 0;                       # Wait, which is created when the train reaches a stop in the Route, and which will contain:
+atomic ctrl Waiting = 0;             # Waiting, if the train is still waiting at the stop
+atomic fun ctrl Time(t) = 0;         # How much left it has to wait for
+atomic ctrl Over = 0;                # Over if the waiting has finished
+
+ctrl Clocks = 0;                     # Train movements are synchronized using clocks
+atomic fun ctrl GC(t) = 0;           # The Global Clock keeps the Local Clocks in sync thanks to the instantaneous reactions
+atomic fun ctrl LC(t) = 1;           # One Local Clock per train
+
+# Bigraph macros
+int batt_level_min = 0;     # Battery levels are given in percentage, and thus are within 0 and 100
+int batt_level_max = 100;
+int batt_level_incs = 10;   # Every battery increment (every charge) is of 10%
+int batt_level_decs = 5;    # Every discharge is of 5%
+int batt_level_min_incs_decs = batt_level_decs;   # The minimum of the two is the decrements
+int time_incs = 10;         # Every clock tick increases time by 10 units (eg, 10 minutes)
+int time_end = 800;         # We consider 12hrs worth of trains
+int waiting_t = 10;         # Trains wait at stops for 10 minutes
+int max_failures = 5;
+float failure_weight = 0.01;
+
+# Gain the Charge from traversing the current electrified track
+fun react gain_charge(c,t) = 
+       Segment.(Train.(Charge(c) | Clock{clock} | Action.id | id) | Electr.Yes | id)
+    || Clocks.(LC(t-10){clock} | GC(t) | id)
+  -[1.0]->
+       Segment.(Train.(Charge(c+10) | Clock{clock} | Action.(id | Update) | id) | Electr.Yes | id)
+    || Clocks.(LC(t){clock} | GC(t) | id);
+
+# Lose the Charge from traversing the current non-electrified track
+fun react lose_charge(c,t) = 
+       Segment.(Train.(Charge(c) | Clock{clock} | Action.id | id) | Electr.No | id)
+    || Clocks.(LC(t-10){clock} | GC(t) | id)
+  -[1.0]->
+       Segment.(Train.(Charge(c-5) | Clock{clock} | Action.(id | Update) | id) | Electr.No | id)
+    || Clocks.(LC(t){clock} | GC(t) | id)
+  if !Waiting in param;
+
+# If stopped at a non-electrified track, the train's charge is preserved
+fun react keep_charge(t) = 
+       Segment.(Train.(Clock{clock} | Action.id | id) | Electr.No | id)
+    || Clocks.(LC(t-10){clock} | GC(t) | id)
+  -[1.0]->
+       Segment.(Train.(Clock{clock} | Action.(id | Update) | id) | Electr.No | id)
+    || Clocks.(LC(t){clock} | GC(t) | id)
+  if Waiting in param;
+
+# Wait at a stop for 1 time unit
+fun react action_wait(t) =
+  Action.(Wait.(Time(t) | Waiting) | Update) -[1.0]-> Action.(Wait.(Time(t-time_incs) | Waiting));
+
+react action_wait_over =
+  Action.(Wait.(Time(0) | Waiting)) -[1.0]-> Action.(Wait.Over);
+
+# After the wait is over, the Train is ready to Move
+react action_resume_move = 
+  Action.(Wait.Over | Update) -[1.0]-> Action.(Wait.Over | Move);
+
+react action_keep_moving = 
+  Action.Update -[1.0]-> Action.Move;
+
+# Being on an electrified track with 100% Charge keeps it at 100%
+react adjust_battery_hi_1 = Charge(110) -[1.0]-> Charge(100);
+react adjust_battery_hi_2 = Charge(105) -[1.0]-> Charge(100);
+
+# If the discharge for the movement ahead depletes the Charge, the Train dies there
+react adjust_battery_lo = 
+    Train.(Charge(0) | Action.id | id)
+  -[1.0]-> 
+    Train.(OutOfBattery | id)
+  @[1];
+
+# A Train arrives on its Route's starting track and will move to the next track on the next time unit
+fun react train_starts(route,time,charge) = 
+       Segment.(WP{rS}.id | id)
+    || /r R(route).(Start{rS} | Trains{r} | id)
+    || Clocks.(GC(time) | id)
+  -[1.0]->
+      /clock /r (
+       Segment.(WP{rS}.id | Train.(Action.1 | Charge(charge) | Route{r} | RouteN{rS} | Clock{clock}) | id)
+    || R(route).(Start{rS} | Trains{r} | id)
+    || Clocks.(GC(time) | LC(time){clock} | id) )
+  if !Train.id in param;
+
+# Move Train between the second and penultimate tracks iteratively
+react move_train =   
+       Segment.(WP{r}.Next{n} | Train.(Action.(Move | id) | RouteN{r} | id) | id)
+    || Segment.(WP{n}.id | id)
+  -[1.0]->
+       Segment.(WP{r}.Next{n} | id)
+    || Segment.(WP{n}.id | Train.(Action.1 | RouteN{n} | id) | id)
+  @[2,3,1,4];
+
+# If the Train has moved to a track that is a stop for the current Route, start a waiting timer
+fun react stop_on_track(route) = 
+    Segment.(Train.(Action.1 | Route{r} | id) | RStops{s} | id) || R(route).(Trains{r} | Stops{s} | id)
+  -[1.0]->
+    Segment.(Train.(Action.Wait.(Waiting | Time(waiting_t)) | Route{r} | id) | RStops{s} | id) || R(route).(Trains{r} | Stops{s} | id);
+
+# Train moves from the last track and leaves
+fun react train_ends(t) =  
+       /clock 
+       (Segment.(WP{r}.1 | Train.(Action.(Move | id) | RouteN{r} | Clock{clock} | id) | id)
+    || Clocks.(LC(t){clock} | id))
+  -[1.0]->
+       Segment.(WP{r}.1 | id)
+    || Clocks.id
+  @[2,3];
+
+fun react electrical_failure(num) =
+    Electr.Yes || Failure(num) -[failure_weight]-> Electr.No || Failure(num+1)
+if !(GC(time_end+time_incs)) in ctx;
+
+# Start the Global Clock
+fun react start_clock(tick_incs) = Clocks.(GC(0) | id) -[1.0]-> Clocks.(GC(tick_incs) | id);
+
+# Increment the Global Clock by 1 time unit
+fun react tick(t) = GC(t) -[1.0]-> GC(t+10);
+
+big s0 = /rAS /rA2 /rA3 /rA4 /rA5  
+         /rBS /rB2 /rB6 /rB7 
+         /rCS /rC8 /rC9 /rC10 /rC11
+         /rAtrains /rBtrains /rCtrains /rAStops /rBStops /rCStops
+  (    
+    ( Segment.(SName("T1") | WP{rAS}.Next{rA2}  | WP{rBS}.Next{rB2} | WP{rCS}.Next{rC8} | Electr.No )   
+    | Segment.(SName("T2") | WP{rA2}.Next{rA3} | WP{rB2}.Next{rB6} | Electr.No )
+    | Segment.(SName("T3") | WP{rA3}.Next{rA4} | Electr.No)   
+    | Segment.(SName("T4") | WP{rA4}.Next{rA5} | Electr.No | RStops{rAStops})   
+    | Segment.(SName("T5") | WP{rA5}.1  | Electr.No | RStops{rAStops})   
+    | Segment.(SName("T6") | WP{rB6}.Next{rB7} | Electr.Yes)   
+    | Segment.(SName("T7") | WP{rB7}.1 | Electr.No | RStops{rBStops})   
+    | Segment.(SName("T8") | WP{rC8}.Next{rC9} | Electr.No) 
+    | Segment.(SName("T9") | WP{rC9}.Next{rC10}  | Electr.Yes | RStops{rCStops})   
+    | Segment.(SName("T10") | WP{rC10}.Next{rC11} | Electr.Yes | RStops{rCStops})   
+    | Segment.(SName("T11") | WP{rC11}.1 | Electr.Yes | RStops{rCStops})   
+    )
+  || 
+    Routes.(R("A").(Start{rAS} | Trains{rAtrains} | Stops{rAStops}) 
+          | R("B").(Start{rBS} | Trains{rBtrains} | Stops{rBStops}) 
+          | R("C").(Start{rCS} | Trains{rCtrains} | Stops{rCStops}))
+  ||
+    Clocks.(GC(0))
+  ||
+    Fail.Failure(0)
+  );
+
+# Sanity predicates
+# Error if Charge < 0 or > 100
+fun big er_charge_below_min(x) = Charge(x);
+fun big er_charge_above_min(x) = Charge(x);
+big er_move_visible = Move;
+big er_WP_unlinked = /x WP{x}.id;
+big er_Next_unlinked = /x WP{y}.Next{x};
+big er_double_updates = Action.(Update | Update | id);
+
+# No 2 Trains on the same track at the same time
+big er_danger = Segment.(Train.id | Train.id | id);
+
+# Debugging predicates
+fun big live(track,curr_ch)  = Segment.(SName(track) | Train.(Charge(curr_ch) | id) | id );
+fun big waiting(route,track) = Segment.(SName(track) | Train.(Action.(Wait.id | Waiting) | Route{r} | id) | id) || R(route).(Trains{r} | id); 
+
+# Predicates for Analysis and Queries
+fun big oob_at(track,t) = 
+     Segment.(SName(track) | Train.(OutOfBattery | Clock{clock} | id) | id)
+  || Clocks.(LC(t){clock} | id);
+big oob = OutOfBattery;
+
+fun big charge_no_fail(x) = Segment.( Train.(Charge(x)| id) | id) || Fail.Failure(0);
+
+fun big charge_fail1(x) = Segment.( Train.(Charge(x)| id) | id) || Fail.Failure(1);
+fun big charge_fail2(x) = Segment.( Train.(Charge(x)| id) | id) || Fail.Failure(2);
+fun big charge_fail3(x) = Segment.( Train.(Charge(x)| id) | id) || Fail.Failure(3);
+fun big charge_fail4(x) = Segment.( Train.(Charge(x)| id) | id) || Fail.Failure(4);
+fun big charge_fail5(x) = Segment.( Train.(Charge(x)| id) | id) || Fail.Failure(5);
+
+
+begin pbrs
+  string routes = {"A", "B", "C"};
+  string tracks = {"T1", "T2", "T3", "T4", "T5", "T6", "T7", "T8", "T9", "T10", "T11"};
+  int batt_levels = [batt_level_min:batt_level_min_incs_decs:batt_level_max];
+  int batt_levels2 = [batt_level_min:batt_level_min_incs_decs:batt_level_max];
+  int er_charge_below_mins = {-5};
+  int er_charge_above_mins = {105, 110};
+  int times = [time_incs:time_incs:time_end];
+  int waiting_times = [time_incs:time_incs:waiting_t];
+  int route_A_timetable = [20:80:(time_end-100)];  # At min 20 and then every 80min, for 12 hors
+  int route_B_timetable = [10:20:(time_end-100)];  # At min 10 and then every 20min
+  int route_C_timetable = [40:40:(time_end-100)];  # Every 40min
+  int num_failures = [0:1:max_failures];
+  init s0;
+  rules = [
+    ( gain_charge(batt_levels,times), lose_charge(batt_levels,times), keep_charge(times) ),
+    ( action_wait(waiting_times), action_wait_over, action_resume_move, action_keep_moving ),
+    ( adjust_battery_hi_1, adjust_battery_hi_2 ),
+    ( adjust_battery_lo ),  
+    ( move_train ),
+    ( stop_on_track(routes) ),
+    ( train_ends(times) ),
+    ( train_starts("A",route_A_timetable,100), train_starts("B",route_B_timetable,100), train_starts("C",route_C_timetable,100) ),
+    { start_clock(time_incs) },
+    { tick(times), electrical_failure(num_failures) }
+    ];
+  preds = { 
+            live(tracks,batt_levels), waiting(routes,tracks), oob_at(tracks,times), oob, 
+            er_charge_below_min(er_charge_below_mins), er_charge_above_min(er_charge_above_mins), 
+            er_move_visible, er_danger, er_WP_unlinked, er_Next_unlinked, er_double_updates,
+            charge_no_fail(batt_levels), 
+            charge_fail1(batt_levels), charge_fail2(batt_levels), charge_fail3(batt_levels), charge_fail4(batt_levels), charge_fail5(batt_levels)
+          };
+end

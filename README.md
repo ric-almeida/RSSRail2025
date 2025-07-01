@@ -37,5 +37,31 @@ where:
 - the `.tra` files will be the PRISM input files
 - `-l` indicates the name of the output file where the states satisfying the predicates are stored.
 
+## PBRS Analysis
+
+For the analysis of the PBRS model with failures, we generate the transition matrix and the predicate information as above using:
+`bigrapher full --solver=GBS -p Rail_PBRS_with_failures.tra -l Rail_PBRS_with_failures.csl Rail_PBRS_with_failures.big -M 3000`
+
+Next, we augment the `.csl` file with the PCTL queries (`/PBRS_Analysis/Queries.props`) that correspond to `Table-1` in the paper. The modifed `.csl` file can now serve as input to the PRISM model checker with the `.tra` file to model check and give the results:
+
+`prism -importtrans Rail_PBRS_with_failures.tra Rail_PBRS_with_failures.csl -dtmc`
+
+In order to change the failure rates, change `float failure_weight = 0.01` in `Rail_PBRS_with_failures.big` to a value of your choice and repeat the above steps.
+
+We have already generated and stored the `.tra` and `.lab` files corresponding to the values discussed in the paper in the subdirectory `PBRS_Analysis`.
+
+## ABRS Analysis
+
+For the analysis of the ABRS model, first we fix the query we wish to run. We then uncomment the predicates corresponding to the query in `Rail_ABRS.big`. We also uncomment the reward-based query for which the experiment is to be run. Next, we generate the transition matrix and the predicate information as above using:
+
+`bigrapher full --solver=GBS -p Rail_ABRS.tra -l Rail_ABRS.csl -r Rail_ABRS.srew Rail_ABRS.big -M 3000`
+
+Next, we augment the `.csl` file with the PCTL queries (`/ABRS_Analysis/Queries.props`) that correspond to the plots in the paper. The modifed `.csl` file can now serve as input to the PRISM model checker with the `.tra` file to model check and give the results:
+
+`prism -importtrans Rail_ABRS.tra -importstaterewards Rail_ABRS.srew Rail_ABRS.csl -mdp -const j=0:1:45 -exportresults Rail_ABRS.txt:csv`
+
+This will store the results corresponding to the experiments run while varying the variable $t$ in the PCTL formula from $0$ to $45$ at an interval of $1$ in the `csv` format. The Jupyter notebook can be used in the end to generate the plots presented in the paper when all the queries have been successfully run and stored.
+
+We have already generated and stored all the relevant files in the subdirectories inside `ABRS_Analysis`. The plots are saved as well.
 
 

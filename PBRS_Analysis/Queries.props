@@ -1,0 +1,31 @@
+P =? [F "oob"] 
+
+P =? [F "charge_fail1_80"] 
+P =? [F "charge_fail1_85"]
+P =? [F "charge_fail1_90"]  
+P =? [F "charge_fail1_95"]
+P =? [F "charge_fail1_100"]  
+
+P =? [F "charge_fail2_80"] 
+P =? [F "charge_fail2_85"]
+P =? [F "charge_fail2_90"]  
+P =? [F "charge_fail2_95"]
+P =? [F "charge_fail2_100"]  
+
+P =? [F "charge_fail3_80"] 
+P =? [F "charge_fail3_85"]
+P =? [F "charge_fail3_90"]  
+P =? [F "charge_fail3_95"]
+P =? [F "charge_fail3_100"]  
+
+P =? [F "charge_fail4_80"] 
+P =? [F "charge_fail4_85"]
+P =? [F "charge_fail4_90"]  
+P =? [F "charge_fail4_95"]
+P =? [F "charge_fail4_100"]  
+
+P =? [F "charge_no_fail_80"] 
+P =? [F "charge_no_fail_85"]
+P =? [F "charge_no_fail_90"]  
+P =? [F "charge_no_fail_95"]
+P =? [F "charge_no_fail_100"]  
