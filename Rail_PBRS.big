@@ -41,6 +41,11 @@ int time_incs = 10;         # Every clock tick increases time by 10 units (eg, 1
 int time_end = 800;         # We consider 12hrs worth of trains
 int waiting_t = 10;         # Trains wait at stops for 10 minutes
 
+# Auxiliary defns for analysis queries
+atomic fun ctrl Failure(x) = 0;
+ctrl Fail = 0;
+int max_failures = 5;     
+
 # Gain the Charge from traversing the current electrified track
 fun react gain_charge(c,t) = 
        Segment.(Train.(Charge(c) | LC(t-10) | Action.id | id) | E.Yes | id)
@@ -126,8 +131,8 @@ fun react train_ends(t) =
        Segment.(WP{r}.1 | id)
   @[2];
 
-react electrical_failure =
-    E.Yes -[0.01]-> E.No
+fun react electrical_failure(num) =
+    E.Yes || Failure(num) -[0.01]-> E.No || Failure(num+1)
 if !(GC(time_end+time_incs)) in ctx;
 
 # Start the Global Clock
@@ -159,11 +164,13 @@ big s0 = /rAS /rA2 /rA3 /rA4 /rA5
           | R("C").(Start{rCS} | Trains{rCtrains} | Stops{rCStops}))
   ||
     Clock.(GC(0))
+    ||
+    Fail.Failure(0)
   );
 
 # Sanity predicates
 # Error if Charge < 0 or > 100
-fun big er_charge_below_min(x) = Charge(x);
+fun big er_charge_below_min(x) = Charge(x-5);
 fun big er_charge_above_min(x) = Charge(x);
 big er_move_visible = Move;
 big er_WP_unlinked = /x WP{x}.id;
@@ -183,18 +190,27 @@ fun big oob_at(track,t) =
 
 big oob = OutOfBattery;
 
+fun big charge_no_fail(x) = Segment.( Train.(Charge(x)| id) | id) || Fail.Failure(0);
+
+fun big charge_fail1(x) = Segment.( Train.(Charge(x)| id) | id) || Fail.Failure(1);
+fun big charge_fail2(x) = Segment.( Train.(Charge(x)| id) | id) || Fail.Failure(2);
+fun big charge_fail3(x) = Segment.( Train.(Charge(x)| id) | id) || Fail.Failure(3);
+fun big charge_fail4(x) = Segment.( Train.(Charge(x)| id) | id) || Fail.Failure(4);
+fun big charge_fail5(x) = Segment.( Train.(Charge(x)| id) | id) || Fail.Failure(5);
+
 begin pbrs
   string routes = {"A", "B", "C"};
   string tracks = {"T1", "T2", "T3", "T4", "T5", "T6", "T7", "T8", "T9", "T10", "T11"};
   int batt_levels = [batt_level_min:batt_level_min_incs_decs:batt_level_max];
   int batt_levels2 = [batt_level_min:batt_level_min_incs_decs:batt_level_max];
-  int er_charge_below_mins = {-5};
+  int er_charge_below_mins = {0};
   int er_charge_above_mins = {105, 110};
   int times = [time_incs:time_incs:time_end];
   int waiting_times = [time_incs:time_incs:waiting_t];
   int route_A_timetable = [20:80:(time_end-100)];  # At min 20 and then every 80min, for 12 hors
   int route_B_timetable = [10:20:(time_end-100)];  # At min 10 and then every 20min
   int route_C_timetable = [40:40:(time_end-100)];  # Every 40min
+  int num_failures = [0:1:max_failures];
   init s0;
   rules = [
     ( gain_charge(batt_levels,times), lose_charge(batt_levels,times), keep_charge(times) ),
@@ -206,11 +222,13 @@ begin pbrs
     ( train_ends(times) ),
     ( train_starts("A",route_A_timetable,100), train_starts("B",route_B_timetable,100), train_starts("C",route_C_timetable,100) ),
     { start_clock(time_incs) },
-    { tick(times), electrical_failure }
+    { tick(times), electrical_failure(num_failures) }
     ];
   preds = { 
             live(tracks,batt_levels), waiting(routes,tracks), oob_at(tracks,times), oob, 
             er_charge_below_min(er_charge_below_mins), er_charge_above_min(er_charge_above_mins), 
-            er_move_visible, er_danger, er_WP_unlinked, er_Next_unlinked, er_double_updates
+            er_move_visible, er_danger, er_WP_unlinked, er_Next_unlinked, er_double_updates,
+            charge_no_fail(batt_levels), 
+            charge_fail1(batt_levels), charge_fail2(batt_levels), charge_fail3(batt_levels), charge_fail4(batt_levels), charge_fail5(batt_levels)
           };
 end
