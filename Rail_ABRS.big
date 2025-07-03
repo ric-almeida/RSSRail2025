@@ -320,40 +320,43 @@ begin abrs
             train_battery_tracker(batt_levels,routes,num),
             tr_use(tracks,batt_levels)
 
-            # tr_use1("T1")[1]
-            # tr_use1("T2")[1]
-            # tr_use1("T3")[1]
-            # tr_use1("T4")[1]
-            # tr_use1("T5")[1]
-            # tr_use1("T6")[1]
-            # tr_use1("T7")[1]
-            # tr_use1("T8")[1]
-            # tr_use1("T9")[1]
-            # tr_use1("T10")[1]
-            # tr_use1("T11")[1]
+            # Track Usage Analysis: uncomment the line below corresponding to the track track to analyse
+            #, tr_use1("T1")[1],
+            # tr_use1("T2")[1],
+            # tr_use1("T3")[1],
+            # tr_use1("T4")[1],
+            # tr_use1("T5")[1],
+            # tr_use1("T6")[1],
+            # tr_use1("T7")[1],
+            # tr_use1("T8")[1],
+            # tr_use1("T9")[1],
+            # tr_use1("T10")[1],
+            # tr_use1("T11")[1],
 
-            # tr_use("T1", 5)[5], tr_use("T1", 10)[10], tr_use("T1", 15)[15], tr_use("T1", 20)[20], tr_use("T1", 25)[25], tr_use("T1", 30)[30], tr_use("T1", 35)[35], tr_use("T1", 40)[40], tr_use("T1", 45)[45], tr_use("T1", 50)[50], tr_use("T1", 55)[55], tr_use("T1", 60)[60], tr_use("T1", 65)[65], tr_use("T1", 70)[70], tr_use("T1", 75)[75], tr_use("T1", 80)[80], tr_use("T1", 85)[85], tr_use("T1", 90)[90], tr_use("T1", 95)[95], tr_use("T1", 100)[100] 
+            # Battery levels per track analysis: uncomment the line corresponding to the track to analyse 
+
+            #, tr_use("T1", 5)[5], tr_use("T1", 10)[10], tr_use("T1", 15)[15], tr_use("T1", 20)[20], tr_use("T1", 25)[25], tr_use("T1", 30)[30], tr_use("T1", 35)[35], tr_use("T1", 40)[40], tr_use("T1", 45)[45], tr_use("T1", 50)[50], tr_use("T1", 55)[55], tr_use("T1", 60)[60], tr_use("T1", 65)[65], tr_use("T1", 70)[70], tr_use("T1", 75)[75], tr_use("T1", 80)[80], tr_use("T1", 85)[85], tr_use("T1", 90)[90], tr_use("T1", 95)[95], tr_use("T1", 100)[100] 
             
-            # tr_use("T2", 5)[5], tr_use("T2", 10)[10], tr_use("T2", 15)[15], tr_use("T2", 20)[20], tr_use("T2", 25)[25], tr_use("T2", 30)[30], tr_use("T2", 35)[35], tr_use("T2", 40)[40], tr_use("T2", 45)[45], tr_use("T2", 50)[50], tr_use("T2", 55)[55], tr_use("T2", 60)[60], tr_use("T2", 65)[65], tr_use("T2", 70)[70], tr_use("T2", 75)[75], tr_use("T2", 80)[80], tr_use("T2", 85)[85], tr_use("T2", 90)[90], tr_use("T2", 95)[95], tr_use("T2", 100)[100]
+            #, tr_use("T2", 5)[5], tr_use("T2", 10)[10], tr_use("T2", 15)[15], tr_use("T2", 20)[20], tr_use("T2", 25)[25], tr_use("T2", 30)[30], tr_use("T2", 35)[35], tr_use("T2", 40)[40], tr_use("T2", 45)[45], tr_use("T2", 50)[50], tr_use("T2", 55)[55], tr_use("T2", 60)[60], tr_use("T2", 65)[65], tr_use("T2", 70)[70], tr_use("T2", 75)[75], tr_use("T2", 80)[80], tr_use("T2", 85)[85], tr_use("T2", 90)[90], tr_use("T2", 95)[95], tr_use("T2", 100)[100]
             
-            # tr_use("T3", 5)[5], tr_use("T3", 10)[10], tr_use("T3", 15)[15], tr_use("T3", 20)[20], tr_use("T3", 25)[25], tr_use("T3", 30)[30], tr_use("T3", 35)[35], tr_use("T3", 40)[40], tr_use("T3", 45)[45], tr_use("T3", 50)[50], tr_use("T3", 55)[55], tr_use("T3", 60)[60], tr_use("T3", 65)[65], tr_use("T3", 70)[70], tr_use("T3", 75)[75], tr_use("T3", 80)[80], tr_use("T3", 85)[85], tr_use("T3", 90)[90], tr_use("T3", 95)[95], tr_use("T3", 100)[100]
+            #, tr_use("T3", 5)[5], tr_use("T3", 10)[10], tr_use("T3", 15)[15], tr_use("T3", 20)[20], tr_use("T3", 25)[25], tr_use("T3", 30)[30], tr_use("T3", 35)[35], tr_use("T3", 40)[40], tr_use("T3", 45)[45], tr_use("T3", 50)[50], tr_use("T3", 55)[55], tr_use("T3", 60)[60], tr_use("T3", 65)[65], tr_use("T3", 70)[70], tr_use("T3", 75)[75], tr_use("T3", 80)[80], tr_use("T3", 85)[85], tr_use("T3", 90)[90], tr_use("T3", 95)[95], tr_use("T3", 100)[100]
             
-            # tr_use("T4", 5)[5], tr_use("T4", 10)[10], tr_use("T4", 15)[15], tr_use("T4", 20)[20], tr_use("T4", 25)[25], tr_use("T4", 30)[30], tr_use("T4", 35)[35], tr_use("T4", 40)[40], tr_use("T4", 45)[45], tr_use("T4", 50)[50], tr_use("T4", 55)[55], tr_use("T4", 60)[60], tr_use("T4", 65)[65], tr_use("T4", 70)[70], tr_use("T4", 75)[75], tr_use("T4", 80)[80], tr_use("T4", 85)[85], tr_use("T4", 90)[90], tr_use("T4", 95)[95], tr_use("T4", 100)[100]
+            #, tr_use("T4", 5)[5], tr_use("T4", 10)[10], tr_use("T4", 15)[15], tr_use("T4", 20)[20], tr_use("T4", 25)[25], tr_use("T4", 30)[30], tr_use("T4", 35)[35], tr_use("T4", 40)[40], tr_use("T4", 45)[45], tr_use("T4", 50)[50], tr_use("T4", 55)[55], tr_use("T4", 60)[60], tr_use("T4", 65)[65], tr_use("T4", 70)[70], tr_use("T4", 75)[75], tr_use("T4", 80)[80], tr_use("T4", 85)[85], tr_use("T4", 90)[90], tr_use("T4", 95)[95], tr_use("T4", 100)[100]
             
-            # tr_use("T5", 5)[5], tr_use("T5", 10)[10], tr_use("T5", 15)[15], tr_use("T5", 20)[20], tr_use("T5", 25)[25], tr_use("T5", 30)[30], tr_use("T5", 35)[35], tr_use("T5", 40)[40], tr_use("T5", 45)[45], tr_use("T5", 50)[50], tr_use("T5", 55)[55], tr_use("T5", 60)[60], tr_use("T5", 65)[65], tr_use("T5", 70)[70], tr_use("T5", 75)[75], tr_use("T5", 80)[80], tr_use("T5", 85)[85], tr_use("T5", 90)[90], tr_use("T5", 95)[95], tr_use("T5", 100)[100]
+            #, tr_use("T5", 5)[5], tr_use("T5", 10)[10], tr_use("T5", 15)[15], tr_use("T5", 20)[20], tr_use("T5", 25)[25], tr_use("T5", 30)[30], tr_use("T5", 35)[35], tr_use("T5", 40)[40], tr_use("T5", 45)[45], tr_use("T5", 50)[50], tr_use("T5", 55)[55], tr_use("T5", 60)[60], tr_use("T5", 65)[65], tr_use("T5", 70)[70], tr_use("T5", 75)[75], tr_use("T5", 80)[80], tr_use("T5", 85)[85], tr_use("T5", 90)[90], tr_use("T5", 95)[95], tr_use("T5", 100)[100]
             
-            # tr_use("T6", 5)[5], tr_use("T6", 10)[10], tr_use("T6", 15)[15], tr_use("T6", 20)[20], tr_use("T6", 25)[25], tr_use("T6", 30)[30], tr_use("T6", 35)[35], tr_use("T6", 40)[40], tr_use("T6", 45)[45], tr_use("T6", 50)[50], tr_use("T6", 55)[55], tr_use("T6", 60)[60], tr_use("T6", 65)[65], tr_use("T6", 70)[70], tr_use("T6", 75)[75], tr_use("T6", 80)[80], tr_use("T6", 85)[85], tr_use("T6", 90)[90], tr_use("T6", 95)[95], tr_use("T6", 100)[100]
+            #, tr_use("T6", 5)[5], tr_use("T6", 10)[10], tr_use("T6", 15)[15], tr_use("T6", 20)[20], tr_use("T6", 25)[25], tr_use("T6", 30)[30], tr_use("T6", 35)[35], tr_use("T6", 40)[40], tr_use("T6", 45)[45], tr_use("T6", 50)[50], tr_use("T6", 55)[55], tr_use("T6", 60)[60], tr_use("T6", 65)[65], tr_use("T6", 70)[70], tr_use("T6", 75)[75], tr_use("T6", 80)[80], tr_use("T6", 85)[85], tr_use("T6", 90)[90], tr_use("T6", 95)[95], tr_use("T6", 100)[100]
             
-            # tr_use("T7", 5)[5], tr_use("T7", 10)[10], tr_use("T7", 15)[15], tr_use("T7", 20)[20], tr_use("T7", 25)[25], tr_use("T7", 30)[30], tr_use("T7", 35)[35], tr_use("T7", 40)[40], tr_use("T7", 45)[45], tr_use("T7", 50)[50], tr_use("T7", 55)[55], tr_use("T7", 60)[60], tr_use("T7", 65)[65], tr_use("T7", 70)[70], tr_use("T7", 75)[75], tr_use("T7", 80)[80], tr_use("T7", 85)[85], tr_use("T7", 90)[90], tr_use("T7", 95)[95], tr_use("T7", 100)[100]
+            #, tr_use("T7", 5)[5], tr_use("T7", 10)[10], tr_use("T7", 15)[15], tr_use("T7", 20)[20], tr_use("T7", 25)[25], tr_use("T7", 30)[30], tr_use("T7", 35)[35], tr_use("T7", 40)[40], tr_use("T7", 45)[45], tr_use("T7", 50)[50], tr_use("T7", 55)[55], tr_use("T7", 60)[60], tr_use("T7", 65)[65], tr_use("T7", 70)[70], tr_use("T7", 75)[75], tr_use("T7", 80)[80], tr_use("T7", 85)[85], tr_use("T7", 90)[90], tr_use("T7", 95)[95], tr_use("T7", 100)[100]
             
-            # tr_use("T8", 5)[5], tr_use("T8", 10)[10], tr_use("T8", 15)[15], tr_use("T8", 20)[20], tr_use("T8", 25)[25], tr_use("T8", 30)[30], tr_use("T8", 35)[35], tr_use("T8", 40)[40], tr_use("T8", 45)[45], tr_use("T8", 50)[50], tr_use("T8", 55)[55], tr_use("T8", 60)[60], tr_use("T8", 65)[65], tr_use("T8", 70)[70], tr_use("T8", 75)[75], tr_use("T8", 80)[80], tr_use("T8", 85)[85], tr_use("T8", 90)[90], tr_use("T8", 95)[95], tr_use("T8", 100)[100]
+            #, tr_use("T8", 5)[5], tr_use("T8", 10)[10], tr_use("T8", 15)[15], tr_use("T8", 20)[20], tr_use("T8", 25)[25], tr_use("T8", 30)[30], tr_use("T8", 35)[35], tr_use("T8", 40)[40], tr_use("T8", 45)[45], tr_use("T8", 50)[50], tr_use("T8", 55)[55], tr_use("T8", 60)[60], tr_use("T8", 65)[65], tr_use("T8", 70)[70], tr_use("T8", 75)[75], tr_use("T8", 80)[80], tr_use("T8", 85)[85], tr_use("T8", 90)[90], tr_use("T8", 95)[95], tr_use("T8", 100)[100]
             
-            # tr_use("T9", 5)[5], tr_use("T9", 10)[10], tr_use("T9", 15)[15], tr_use("T9", 20)[20], tr_use("T9", 25)[25], tr_use("T9", 30)[30], tr_use("T9", 35)[35], tr_use("T9", 40)[40], tr_use("T9", 45)[45], tr_use("T9", 50)[50], tr_use("T9", 55)[55], tr_use("T9", 60)[60], tr_use("T9", 65)[65], tr_use("T9", 70)[70], tr_use("T9", 75)[75], tr_use("T9", 80)[80], tr_use("T9", 85)[85], tr_use("T9", 90)[90], tr_use("T9", 95)[95], tr_use("T9", 100)[100]
+            #, tr_use("T9", 5)[5], tr_use("T9", 10)[10], tr_use("T9", 15)[15], tr_use("T9", 20)[20], tr_use("T9", 25)[25], tr_use("T9", 30)[30], tr_use("T9", 35)[35], tr_use("T9", 40)[40], tr_use("T9", 45)[45], tr_use("T9", 50)[50], tr_use("T9", 55)[55], tr_use("T9", 60)[60], tr_use("T9", 65)[65], tr_use("T9", 70)[70], tr_use("T9", 75)[75], tr_use("T9", 80)[80], tr_use("T9", 85)[85], tr_use("T9", 90)[90], tr_use("T9", 95)[95], tr_use("T9", 100)[100]
             
-            # tr_use("T10", 5)[5], tr_use("T10", 10)[10], tr_use("T10", 15)[15], tr_use("T10", 20)[20], tr_use("T10", 25)[25], tr_use("T10", 30)[30], tr_use("T10", 35)[35], tr_use("T10", 40)[40], tr_use("T10", 45)[45], tr_use("T10", 50)[50], tr_use("T10", 55)[55], tr_use("T10", 60)[60], tr_use("T10", 65)[65], tr_use("T10", 70)[70], tr_use("T10", 75)[75], tr_use("T10", 80)[80], tr_use("T10", 85)[85], tr_use("T10", 90)[90], tr_use("T10", 95)[95], tr_use("T10", 100)[100]
+            #, tr_use("T10", 5)[5], tr_use("T10", 10)[10], tr_use("T10", 15)[15], tr_use("T10", 20)[20], tr_use("T10", 25)[25], tr_use("T10", 30)[30], tr_use("T10", 35)[35], tr_use("T10", 40)[40], tr_use("T10", 45)[45], tr_use("T10", 50)[50], tr_use("T10", 55)[55], tr_use("T10", 60)[60], tr_use("T10", 65)[65], tr_use("T10", 70)[70], tr_use("T10", 75)[75], tr_use("T10", 80)[80], tr_use("T10", 85)[85], tr_use("T10", 90)[90], tr_use("T10", 95)[95], tr_use("T10", 100)[100]
             
-            # tr_use("T11", 5)[5], tr_use("T11", 10)[10], tr_use("T11", 15)[15], tr_use("T11", 20)[20], tr_use("T11", 25)[25], tr_use("T11", 30)[30], tr_use("T11", 35)[35], tr_use("T11", 40)[40], tr_use("T11", 45)[45], tr_use("T11", 50)[50], tr_use("T11", 55)[55], tr_use("T11", 60)[60], tr_use("T11", 65)[65], tr_use("T11", 70)[70], tr_use("T11", 75)[75], tr_use("T11", 80)[80], tr_use("T11", 85)[85], tr_use("T11", 90)[90], tr_use("T11", 95)[95], tr_use("T11", 100)[100]
+            #, tr_use("T11", 5)[5], tr_use("T11", 10)[10], tr_use("T11", 15)[15], tr_use("T11", 20)[20], tr_use("T11", 25)[25], tr_use("T11", 30)[30], tr_use("T11", 35)[35], tr_use("T11", 40)[40], tr_use("T11", 45)[45], tr_use("T11", 50)[50], tr_use("T11", 55)[55], tr_use("T11", 60)[60], tr_use("T11", 65)[65], tr_use("T11", 70)[70], tr_use("T11", 75)[75], tr_use("T11", 80)[80], tr_use("T11", 85)[85], tr_use("T11", 90)[90], tr_use("T11", 95)[95], tr_use("T11", 100)[100]
             
-            # tr_use("T1", 0)[-200], tr_use("T2", 0)[-200], tr_use("T3", 0)[-200], tr_use("T4", 0)[-200], tr_use("T5", 0)[-200], tr_use("T6", 0)[-200], tr_use("T7", 0)[-200], tr_use("T8", 0)[-200], tr_use("T9", 0)[-200], tr_use("T10", 0)[-200], tr_use("T11", 0)[-200]
+            #, tr_use("T1", 0)[-200], tr_use("T2", 0)[-200], tr_use("T3", 0)[-200], tr_use("T4", 0)[-200], tr_use("T5", 0)[-200], tr_use("T6", 0)[-200], tr_use("T7", 0)[-200], tr_use("T8", 0)[-200], tr_use("T9", 0)[-200], tr_use("T10", 0)[-200], tr_use("T11", 0)[-200]
           };
 end
