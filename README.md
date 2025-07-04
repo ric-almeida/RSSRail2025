@@ -45,7 +45,7 @@ We start by augmenting the `.csl` file with the PCTL queries that correspond to 
 
 `prism -importtrans Rail_PBRS.tra Rail_PBRS.csl -dtmc -exportresults Rail_PBRS_analysis.txt`
 
-This saves the output results in `Rail_PBRS_analysis.txt`, and these can be read as explained below. 
+This saves the output results in the root dir in `Rail_PBRS_analysis.txt`, and these can be read as explained below. 
 ```
 P=? [ F "charge_fail[n]_[l]" ]:
 Result
@@ -69,9 +69,7 @@ Then `cat ABRS_Analysis/Track_Usage/Queries.props >> Rail_ABRS_1_T1.csl`
 
 Next we run `prism -importtrans Rail_ABRS_1_T1.tra -importstaterewards Rail_ABRS_1_T1.srew Rail_ABRS_1_T1.csl -mdp -const j=0:1:45 -exportresults Rail_ABRS_1_T1.csv:csv`
 
-This will store the results corresponding to the experiments run while varying the variable $t$ in the PCTL formula from $0$ to $45$ at an interval of $1$ in the `csv` format. Once results have been generated and stored for the 11 tracks, the Jupyter notebook can be used (to be updated) in the end to generate the plots presented in the paper.
-
-We have already generated and stored all the relevant files in the subdirectories inside `ABRS_Analysis`. The plots are saved as well.
+This will store the results corresponding to the experiments run while varying the variable $t$ in the PCTL formula from $0$ to $45$ at an interval of $1$ in the `csv` format. Once results have been generated and stored for the 11 tracks, the Jupyter notebook can be used (to be updated) in the end to generate the plots presented in the paper. The plots have already been stored under `ABRS_Analysis/Plots`.
 
 ### Battery levels per track over time 
 

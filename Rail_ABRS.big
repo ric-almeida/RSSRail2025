@@ -321,17 +321,17 @@ begin abrs
             tr_use(tracks,batt_levels)
 
             # Track Usage Analysis: uncomment the line below corresponding to the track track to analyse
-            #, tr_use1("T1")[1],
-            # tr_use1("T2")[1],
-            # tr_use1("T3")[1],
-            # tr_use1("T4")[1],
-            # tr_use1("T5")[1],
-            # tr_use1("T6")[1],
-            # tr_use1("T7")[1],
-            # tr_use1("T8")[1],
-            # tr_use1("T9")[1],
-            # tr_use1("T10")[1],
-            # tr_use1("T11")[1],
+            #, tr_use1("T1")[1]
+            #, tr_use1("T2")[1]
+            #, tr_use1("T3")[1]
+            #, tr_use1("T4")[1]
+            #, tr_use1("T5")[1]
+            #, tr_use1("T6")[1]
+            #, tr_use1("T7")[1]
+            , tr_use1("T8")[1]
+            #, tr_use1("T9")[1]
+            #, tr_use1("T10")[1]
+            #, tr_use1("T11")[1]
 
             # Battery levels per track analysis: uncomment the line corresponding to the track to analyse 
 
