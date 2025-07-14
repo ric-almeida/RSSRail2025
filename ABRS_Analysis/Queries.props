@@ -4,7 +4,7 @@ const int j;
 // Pmin =? [F "oob"] 
 // E [F "oob"] 
 
-// Rmax =? [C<=j]
+Rmax =? [C<=j]
 // Rmax =? [I=j] 
 
 // Rmin =? [C<=j]
